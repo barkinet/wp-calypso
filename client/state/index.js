@@ -24,7 +24,12 @@ import ui from './ui/reducer';
 /**
  * Module variables
  */
-const reducer = combineReducers( {
+var createStoreWithMiddleware = applyMiddleware(
+	thunkMiddleware,
+	analyticsMiddleware
+);
+
+export const reducer = combineReducers( {
 	plugins,
 	application,
 	notices,
@@ -39,12 +44,7 @@ const reducer = combineReducers( {
 	ui
 } );
 
-var createStoreWithMiddleware = applyMiddleware(
-	thunkMiddleware,
-	analyticsMiddleware
-);
-
-export function createReduxStore() {
+export function createReduxStore( initialState = {} ) {
 	if (
 		typeof window === 'object' &&
 		window.app &&
@@ -53,5 +53,8 @@ export function createReduxStore() {
 	) {
 		createStoreWithMiddleware = compose( createStoreWithMiddleware, window.devToolsExtension() );
 	}
-	return createStoreWithMiddleware( createStore )( reducer );
-};
+	if ( initialState === null ) {
+		initialState = {};
+	}
+	return createStoreWithMiddleware( createStore )( reducer, initialState );
+}
