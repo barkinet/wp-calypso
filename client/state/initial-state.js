@@ -3,6 +3,7 @@
  */
 import debugModule from 'debug';
 import localforage from 'localforage';
+import msgpack from 'msgpack-lite';
 
 /**
  * Internal dependencies
@@ -18,19 +19,23 @@ const debug = debugModule( 'calypso:state' );
 const localforageConfig = {
 	name: 'calypso',
 	storeName: 'calypso_store',
-	description: 'Calypso Storage'
+	description: 'Calypso Storage',
+	driver: localforage.INDEXDB
 };
 
 function serialize( state ) {
-	return reducer( state, { type: SERIALIZE } );
+	const unencodedState = reducer( state, { type: SERIALIZE } );
+	return msgpack.encode( unencodedState );
 }
 
-function deserialize( state ) {
+function deserialize( encodedState ) {
+	const state = msgpack.decode( encodedState );
+	debug( 'decoded state', state );
 	return reducer( state, { type: DESERIALIZE } );
 }
 
 function loadInitialState( initialState ) {
-	debug( 'loading initial state with', initialState );
+	debug( 'loading initial state' );
 	return createReduxStore( deserialize( initialState ) );
 }
 
