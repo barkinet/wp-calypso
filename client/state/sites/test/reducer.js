@@ -6,7 +6,7 @@ import { expect } from 'chai';
 /**
  * Internal dependencies
  */
-import { SITE_RECEIVE, SERIALIZE } from 'state/action-types';
+import { SITE_RECEIVE, SERIALIZE, DESERIALIZE } from 'state/action-types';
 import { items } from '../reducer';
 
 describe( 'reducer', () => {
@@ -56,7 +56,7 @@ describe( 'reducer', () => {
 				2916284: { ID: 2916284, name: 'Just You Wait' }
 			} );
 		} );
-		it( 'should return a js object on TO_OBJECT', () => {
+		it( 'should return a js object on SERIALIZE', () => {
 			const original = Object.freeze( {
 				2916284: { ID: 2916284, name: 'WordPress.com Example Blog', somethingDecoratedMe: () => {} }
 			} );
@@ -64,6 +64,22 @@ describe( 'reducer', () => {
 			expect( state ).to.eql( {
 				2916284: { ID: 2916284, name: 'WordPress.com Example Blog' }
 			} );
+		} );
+		it( 'it validates state on DESERIALIZE', () => {
+			const original = Object.freeze( {
+				2916284: { ID: 2916284, name: 'WordPress.com Example Blog' }
+			} );
+			const state = items( original, { type: DESERIALIZE } );
+			expect( state ).to.eql( {
+				2916284: { ID: 2916284, name: 'WordPress.com Example Blog' }
+			} );
+		} );
+		it( 'when state has validation errors on DESERIALIZE it returns initial state', () => {
+			const original = Object.freeze( {
+				2916284: { name: 'WordPress.com Example Blog' }
+			} );
+			const state = items( original, { type: DESERIALIZE } );
+			expect( state ).to.eql( {} );
 		} );
 	} );
 } );
