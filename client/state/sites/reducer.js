@@ -6,8 +6,6 @@ import pick from 'lodash/object/pick';
 import indexBy from 'lodash/collection/indexBy';
 import isFunction from 'lodash/lang/isFunction';
 import omit from 'lodash/object/omit';
-import debugModule from 'debug';
-import Joi from 'joi';
 
 /**
  * Internal dependencies
@@ -15,11 +13,7 @@ import Joi from 'joi';
 import { plans } from './plans/reducer';
 import { SITE_RECEIVE, SERIALIZE, DESERIALIZE } from 'state/action-types';
 import schema from './schema';
-
-/**
- * Module variables
- */
-const debug = debugModule( 'calypso:state:sites' );
+import { isValidStateWithSchema } from 'state/utils';
 
 /**
  * Tracks all known site objects, indexed by site ID.
@@ -44,15 +38,7 @@ export function items( state = {}, action ) {
 			} );
 			return indexBy( sites, 'ID' );
 		case DESERIALIZE:
-			const validationErrors = Object.keys( state ).map( ( key ) => {
-				return Joi.validate( state[key], schema ).error
-			} ).filter( error => !! error );
-			if ( validationErrors.length > 0 ) {
-				debug( 'failed to deserialize site items', validationErrors );
-				return {};
-			}
-			return state;
-
+			return isValidStateWithSchema( state, schema ) ? state : {};
 	}
 	return state;
 }
