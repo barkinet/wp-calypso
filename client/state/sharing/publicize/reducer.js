@@ -10,8 +10,16 @@ import indexBy from 'lodash/collection/indexBy';
 import {
 	PUBLICIZE_CONNECTIONS_REQUEST,
 	PUBLICIZE_CONNECTIONS_RECEIVE,
-	PUBLICIZE_CONNECTIONS_REQUEST_FAILURE
+	PUBLICIZE_CONNECTIONS_REQUEST_FAILURE,
+	SERIALIZE,
+	DESERIALIZE
 } from 'state/action-types';
+import {
+	fetchingConnectionsSchema,
+	connectionsSchema,
+	connectionsBySiteIdSchema
+} from './schema'
+import { isValidStateWithSchema } from 'state/utils'
 
 /**
  * Track the current status for fetching connections. Maps site ID to the
@@ -29,10 +37,13 @@ export function fetchingConnections( state = {}, action ) {
 		case PUBLICIZE_CONNECTIONS_RECEIVE:
 		case PUBLICIZE_CONNECTIONS_REQUEST_FAILURE:
 			const { type, siteId } = action;
-			state = Object.assign( {}, state, {
+			return Object.assign( {}, state, {
 				[ siteId ]: PUBLICIZE_CONNECTIONS_REQUEST === type
 			} );
-			break;
+		case SERIALIZE:
+			return state;
+		case DESERIALIZE:
+			return isValidStateWithSchema( state, fetchingConnectionsSchema ) ? state : {};
 	}
 
 	return state;
@@ -48,8 +59,11 @@ export function fetchingConnections( state = {}, action ) {
 export function connections( state = {}, action ) {
 	switch ( action.type ) {
 		case PUBLICIZE_CONNECTIONS_RECEIVE:
-			state = Object.assign( {}, state, indexBy( action.data.connections, 'ID' ) );
-			break;
+			return Object.assign( {}, state, indexBy( action.data.connections, 'ID' ) );
+		case SERIALIZE:
+			return state;
+		case DESERIALIZE:
+			return isValidStateWithSchema( state, connectionsSchema ) ? state : {};
 	}
 
 	return state;
@@ -67,10 +81,13 @@ export function connections( state = {}, action ) {
 export function connectionsBySiteId( state = {}, action ) {
 	switch ( action.type ) {
 		case PUBLICIZE_CONNECTIONS_RECEIVE:
-			state = Object.assign( {}, state, {
+			return Object.assign( {}, state, {
 				[ action.siteId ]: action.data.connections.map( ( connection ) => connection.ID )
 			} );
-			break;
+		case SERIALIZE:
+			return state;
+		case DESERIALIZE:
+			return isValidStateWithSchema( state, connectionsBySiteIdSchema ) ? state : {};
 	}
 
 	return state;
