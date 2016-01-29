@@ -36,6 +36,9 @@ function deserialize( encodedState ) {
 
 function loadInitialState( initialState ) {
 	debug( 'loading initial state' );
+	if ( initialState === null ) {
+		throw new Error( 'no initial state found in localforage' );
+	}
 	return createReduxStore( deserialize( initialState ) );
 }
 
