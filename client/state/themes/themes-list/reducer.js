@@ -10,6 +10,8 @@ import unique from 'lodash/array/unique';
 import ActionTypes from '../action-types';
 import { PER_PAGE } from './constants';
 import { DESERIALIZE, SERIALIZE } from 'state/action-types';
+import { isValidStateWithSchema } from 'state/utils';
+import schema from './schema';
 
 const defaultQuery = fromJS( {
 	search: '',
@@ -22,7 +24,7 @@ const defaultQueryState = fromJS( {
 	isFetchingNextPage: false
 } );
 
-const initialState = query( fromJS( {
+export const initialState = query( fromJS( {
 	list: [],
 	nextId: 0,
 	query: {},
@@ -38,7 +40,7 @@ function add( ids, list ) {
 	return unique( list.concat( ids ) );
 }
 
-function query( state, params = {} ) {
+export function query( state, params = {} ) {
 	const nextId = state.get( 'nextId' );
 
 	return state
@@ -91,7 +93,10 @@ export default ( state = initialState, action ) => {
 			// here.
 			return state.set( 'active', action.theme.id );
 		case DESERIALIZE:
-			return query( fromJS( state ) );
+			if ( isValidStateWithSchema( state, schema ) ) {
+				return query( fromJS( state ) );
+			}
+			return initialState;
 		case SERIALIZE:
 			return state.toJS();
 	}
