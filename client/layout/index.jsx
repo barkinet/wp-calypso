@@ -91,6 +91,10 @@ Layout = React.createClass( {
 	},
 
 	renderMasterbar: function() {
+		if ( 'login' === this.props.section ) {
+			return null;
+		}
+
 		if ( ! this.props.user ) {
 			return <MasterbarMinimal url="/" />;
 		}
