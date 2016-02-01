@@ -16,7 +16,7 @@ import { SERIALIZE, DESERIALIZE } from 'state/action-types'
  */
 const debug = debugModule( 'calypso:state' );
 
-const localforageConfig = {
+export const localforageConfig = {
 	name: 'calypso',
 	storeName: 'calypso_store',
 	description: 'Calypso Storage',

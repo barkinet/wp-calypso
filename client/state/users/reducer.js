@@ -6,7 +6,13 @@ import { combineReducers } from 'redux';
 /**
  * Internal dependencies
  */
-import { USER_RECEIVE } from 'state/action-types';
+import {
+	USER_RECEIVE,
+	DESERIALIZE,
+	SERIALIZE
+} from 'state/action-types';
+import schema from './schema';
+import { isValidStateWithSchema } from 'state/utils';
 
 /**
  * Tracks all known user objects, indexed by user ID.
@@ -18,10 +24,13 @@ import { USER_RECEIVE } from 'state/action-types';
 export function items( state = {}, action ) {
 	switch ( action.type ) {
 		case USER_RECEIVE:
-			state = Object.assign( {}, state, {
+			return Object.assign( {}, state, {
 				[ action.user.ID ]: action.user
 			} );
-			break;
+		case DESERIALIZE:
+			return isValidStateWithSchema( state, schema ) ? state : {};
+		case SERIALIZE:
+			return state;
 	}
 
 	return state;
