@@ -86,18 +86,11 @@ export class SyncHandler {
 
 					debug( 'WP.com response %o -> %o', path, resData );
 
-					const isPostRequest = clonedParams &&
+					const isPOSTRequest = clonedParams &&
 						clonedParams.method &&
 						'post' === clonedParams.method.toLowerCase();
 
-					if ( ! isPostRequest ) {
-						if ( responseSent ) {
-							debug( 'data is already stored. Overwriting ...' );
-						}
-
-						// remove some response fields before to store
-						delete resData._headers;
-
+					if ( ! isPOSTRequest ) {
 						let storingData = {
 							__sync: {
 								key,
@@ -108,7 +101,24 @@ export class SyncHandler {
 							params: clonedParams
 						};
 
-						self.storeRecord( key, storingData );
+						self.storeRecord( key, storingData, storedErr => {
+							if ( storedErr ) {
+								console.error( storedErr );
+								if ( ! responseSent ) {
+									wrappedResponseCallback( err, resData );
+								}
+							}
+
+							// extra response
+							let _resData = Object.assign(
+								{},
+								resData,
+								{ __backgroundResponse: true }
+							);
+
+							debug( 'background response sent' );
+							wrappedResponseCallback( err, _resData );
+						} );
 					} else {
 						debug( 'skip - non sync request: [%o] %o - %o\n', path, params, resData );
 					}
