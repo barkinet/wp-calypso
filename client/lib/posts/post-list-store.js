@@ -166,8 +166,9 @@ export default function( id ) {
 		if ( postIds.length ) {
 			// did we actually find any new posts?
 			postIds = difference( postIds, _activeList.postIds );
+
 			if ( postIds.length ) {
-				_activeList.postIds = _activeList.postIds.concat( postIds );
+				_activeList.postIds = postIds.concat( _activeList.postIds );
 				_activeList.page++;
 			}
 		}
