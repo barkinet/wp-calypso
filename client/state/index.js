@@ -45,8 +45,8 @@ var createStoreWithMiddleware = applyMiddleware(
 );
 
 function getInitialState() {
-	if ( typeof window === 'object' && window.store ) {
-		return window.store;
+	if ( typeof window === 'object' && window.redux_store ) {
+		return window.redux_store;
 	}
 	return {};
 }

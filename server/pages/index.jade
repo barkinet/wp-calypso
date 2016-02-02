@@ -112,7 +112,7 @@ html(lang=lang, dir=isRTL ? 'rtl' : 'ltr', class=isFluidWidth ? 'is-fluid-width'
 		if app
 			script(type='text/javascript')!='var app = ' + sanitize.jsonStringifyForHtml( app )
 		if store
-			script(type='text/javascript')!='var store = ' + sanitize.jsonStringifyForHtml( store )
+			script(type='text/javascript')!='var redux_store = ' + sanitize.jsonStringifyForHtml( store )
 		if i18nLocaleScript
 			script(src=i18nLocaleScript)
 		if 'development' === env || isDebug
