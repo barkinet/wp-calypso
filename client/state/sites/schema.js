@@ -24,6 +24,7 @@ const icon = Joi.object().keys( {
 } );
 
 const item = Joi.object().keys( {
+	_headers: Joi.object().optional(),
 	ID: Joi.number().integer().required(),
 	name: Joi.string().min( 1 ).required(),
 	description: Joi.string().allow( '' ).optional(),
@@ -48,8 +49,12 @@ const item = Joi.object().keys( {
 	primary: Joi.boolean().optional(),
 	domain: Joi.string().allow( '' ).optional(),
 	slug: Joi.string().allow( '' ).optional(),
+	settings: Joi.object().optional(),
 	title: Joi.string().allow( '' ).optional(),
-	wpcom_url: Joi.string().allow( '' ).optional()
+	wpcom_url: Joi.string().allow( '' ).optional(),
+	fetchingSettings: Joi.boolean().optional(),
+	fetchingUsers: Joi.boolean().optional(),
+	latestSettings: Joi.number().integer().optional()
 } );
 
 const schema = Joi.object().pattern( /\d+/, item );
