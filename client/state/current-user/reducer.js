@@ -2,7 +2,6 @@
  * External dependencies
  */
 import { combineReducers } from 'redux';
-import Joi from 'joi';
 
 /**
  * Internal dependencies

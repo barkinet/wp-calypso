@@ -29,6 +29,7 @@ export function items( state = [], action ) {
 				return show;
 			} );
 		case SERIALIZE:
+			return [];
 		case DESERIALIZE:
 			return [];
 	}

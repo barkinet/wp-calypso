@@ -20,6 +20,7 @@ export function connectionState( state = 'CHECKING', action ) {
 		case CONNECTION_RESTORED:
 			return 'ONLINE';
 		case SERIALIZE:
+			return 'CHECKING';
 		case DESERIALIZE:
 			return 'CHECKING';
 	}

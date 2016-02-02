@@ -27,6 +27,7 @@ function reducer( state = {}, action ) {
 		case FETCH_WPORG_PLUGIN_DATA:
 			return updatePluginState( state, pluginSlug, Object.assign( { isFetching: true } ) );
 		case SERIALIZE:
+			return {};
 		case DESERIALIZE:
 			return {};
 		default:

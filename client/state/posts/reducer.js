@@ -33,6 +33,7 @@ export function items( state = {}, action ) {
 		case POSTS_RECEIVE:
 			return Object.assign( {}, state, indexBy( action.posts, 'global_ID' ) );
 		case SERIALIZE:
+			return {};
 		case DESERIALIZE:
 			return {};
 	}

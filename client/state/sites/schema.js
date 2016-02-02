@@ -18,11 +18,16 @@ const plan = Joi.object().keys( {
 	free_trial: Joi.boolean()
 } );
 
+const icon = Joi.object().keys( {
+	ico: Joi.string().allow( '' ).optional(),
+	img: Joi.string().allow( '' ).optional()
+} );
+
 const item = Joi.object().keys( {
 	ID: Joi.number().integer().required(),
 	name: Joi.string().min( 1 ).required(),
 	description: Joi.string().allow( '' ).optional(),
-	URL: Joi.string().optional(),
+	URL: Joi.string().allow( '' ).optional(),
 	jetpack: Joi.boolean().optional(),
 	post_count: Joi.number().integer().optional(),
 	subscribers_count: Joi.number().integer().optional(),
@@ -32,6 +37,7 @@ const item = Joi.object().keys( {
 	options: Joi.object().optional(),
 	meta: Joi.object().optional(),
 	user_can_manage: Joi.boolean().optional(),
+	icon: icon.optional(),
 	is_vip: Joi.boolean().optional(),
 	is_multisite: Joi.boolean().optional(),
 	is_following: Joi.boolean().optional(),

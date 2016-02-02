@@ -12,7 +12,7 @@ const user = Joi.object().keys( {
 	visible_site_count: Joi.number().integer().optional(),
 	date: Joi.string().allow( '' ).optional(),
 	has_unseen_notes: Joi.boolean().optional(),
-	newest_note_type: Joi.string().optional(),
+	newest_note_type: Joi.string().allow( '' ).optional(),
 	phone_account: Joi.boolean().optional(),
 	email: Joi.string().allow( '' ).optional(),
 	email_verified: Joi.boolean().optional(),
