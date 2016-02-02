@@ -44,6 +44,13 @@ var createStoreWithMiddleware = applyMiddleware(
 	analyticsMiddleware
 );
 
+function getInitialState() {
+	if ( typeof window === 'object' && window.store ) {
+		return window.store;
+	}
+	return {};
+}
+
 export function createReduxStore() {
 	if (
 		typeof window === 'object' &&
@@ -53,5 +60,5 @@ export function createReduxStore() {
 	) {
 		createStoreWithMiddleware = compose( createStoreWithMiddleware, window.devToolsExtension() );
 	}
-	return createStoreWithMiddleware( createStore )( reducer );
+	return createStoreWithMiddleware( createStore )( reducer, getInitialState() );
 };

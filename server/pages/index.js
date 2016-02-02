@@ -10,7 +10,8 @@ var express = require( 'express' ),
 	includes = require( 'lodash/collection/includes' ),
 	React = require( 'react' ),
 	ReactDomServer = require( 'react-dom/server' ),
-	Helmet = require( 'react-helmet' );
+	Helmet = require( 'react-helmet' ),
+	pick = require( 'lodash/object/pick' );
 
 var config = require( 'config' ),
 	sanitize = require( 'sanitize' ),
@@ -393,15 +394,16 @@ module.exports = function() {
 				: 'all';
 
 			if ( config.isEnabled( 'server-side-rendering' ) ) {
-				const reduxStore = createReduxStore();
-				reduxStore.dispatch( setSection( 'design', { hasSidebar: false } ) );
+				const store = createReduxStore();
+				store.dispatch( setSection( 'design', { hasSidebar: false } ) );
+				context.store = pick( store.getState(), 'ui' );
 
 				try {
 					if ( ! cachedDesignMarkup[ tier ] ) {
 						const cached = cachedDesignMarkup[ tier ] = {};
 						let startTime = Date.now();
 						cached.layout = ReactDomServer.renderToString(
-								LayoutLoggedOutDesignFactory( { tier, store: reduxStore } ) );
+								LayoutLoggedOutDesignFactory( { tier, store } ) );
 						let rtsTimeMs = Date.now() - startTime;
 
 						cached.helmetData = Helmet.rewind();
