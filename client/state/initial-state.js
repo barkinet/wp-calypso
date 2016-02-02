@@ -10,6 +10,7 @@ import msgpack from 'msgpack-lite';
  */
 import { createReduxStore, reducer } from 'state';
 import { SERIALIZE, DESERIALIZE } from 'state/action-types'
+import config from 'config';
 
 /**
  * Module variables
@@ -58,11 +59,16 @@ function persistOnChange( reduxStore ) {
 }
 
 export default function createReduxStoreFromPersistedInitialState( reduxStoreReady ) {
-	localforage.config( localforageConfig );
-	localforage.getItem( 'redux-state' )
-		.then( loadInitialState )
-		.catch( loadInitialStateFailed )
-		.then( persistOnChange )
-		.then( reduxStoreReady );
+	if ( config.isEnabled( 'persist-redux' ) ) {
+		localforage.config( localforageConfig );
+		localforage.getItem( 'redux-state' )
+			.then( loadInitialState )
+			.catch( loadInitialStateFailed )
+			.then( persistOnChange )
+			.then( reduxStoreReady );
+	} else {
+		debug( 'persist-redux is not enabled, building state from scratch' );
+		reduxStoreReady( createReduxStore() );
+	}
 }
 
