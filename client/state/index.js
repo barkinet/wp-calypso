@@ -50,8 +50,8 @@ if ( typeof window === 'object' ) {
 let createStoreWithMiddleware = applyMiddleware.apply( null, middleware );
 
 function getInitialState() {
-	if ( typeof window === 'object' && window.redux_store ) {
-		return window.redux_store;
+	if ( typeof window === 'object' && window.initialReduxState ) {
+		return window.initialReduxState;
 	}
 	return {};
 }

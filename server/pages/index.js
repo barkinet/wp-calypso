@@ -396,7 +396,7 @@ module.exports = function() {
 			if ( config.isEnabled( 'server-side-rendering' ) ) {
 				const store = createReduxStore();
 				store.dispatch( setSection( 'design', { hasSidebar: false } ) );
-				context.store = pick( store.getState(), 'ui' );
+				context.initialReduxState = pick( store.getState(), 'ui' );
 
 				try {
 					if ( ! cachedDesignMarkup[ tier ] ) {
