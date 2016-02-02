@@ -201,12 +201,16 @@ The `connect` function accepts two arguments, and they each serve a distinct pur
 As an example, consider a component which renders a Delete button for a given post. We want to display the post title as a label in the delete button, and allow the component to trigger the post deletion when clicked.
 
 ```jsx
-function PostDeleteButton( { label, delete } ) {
-	return (
-		<button onClick={ delete }>
-			{ this.translate( 'Delete "%s"', { args: [ label ] } ) }
-		</button>
-	);
+class PostDeleteButton extends React.Component {
+	render() {
+		return (
+			<button onClick={ this.props.delete }>
+				{ this.translate( 'Delete %s', { 
+					args: [ this.props.label ]
+				} ) }
+			</button>
+		);
+	}
 }
 
 export default connect(
