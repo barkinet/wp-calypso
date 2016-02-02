@@ -214,3 +214,10 @@
 		color: $alert-yellow;
 	}
 }
+
+.site__star-badge {
+	align-self: center;
+	color: $gray;
+	padding-right: 16px;
+	line-height: 0;
+}

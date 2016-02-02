@@ -176,7 +176,7 @@ export default React.createClass( {
 		if ( this.shouldShowGroups() && ! this.state.search ) {
 			return (
 				<div>
-					<span className="site-selector__heading">{ this.translate( 'Sites' ) }</span>
+					{ this.renderRecentSites() }
 					{ siteElements }
 				</div>
 			);
@@ -240,12 +240,7 @@ export default React.createClass( {
 			return;
 		}
 
-		return (
-			<div>
-				<span className="site-selector__heading">{ this.translate( 'Recent Sites' ) }</span>
-				{ recentSites }
-			</div>
-		);
+		return recentSites;
 	},
 
 	renderStarredSites() {
@@ -275,10 +270,7 @@ export default React.createClass( {
 		}, this );
 
 		return (
-			<div>
-				<span className="site-selector__heading">
-					<Gridicon icon="star" size={ 18 } /> { this.translate( 'Starred' ) }
-				</span>
+			<div className="site-selector__starred">
 				{ starredSites }
 			</div>
 		);
@@ -302,7 +294,6 @@ export default React.createClass( {
 					<div className="site-selector__sites" ref="selector">
 						{ this.renderAllSites() }
 						{ this.renderStarredSites() }
-						{ this.renderRecentSites() }
 						{ this.renderSites() }
 					</div>
 					{ this.props.showAddNewSite && this.addNewSite() }
