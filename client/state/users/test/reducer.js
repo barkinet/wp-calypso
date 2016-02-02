@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { expect } from 'chai';
+import sinon from 'sinon';
 
 /**
  * Internal dependencies
@@ -61,116 +62,126 @@ describe( 'reducer', () => {
 			} );
 		} );
 
-		it( 'persists state', () => {
-			const state = Object.freeze( {
-				73705554: {
-					ID: 73705554,
-					display_name: 'Test User',
-					username: 'testuser',
-					avatar_URL: 'https://www.example.com',
-					site_count: 11,
-					visible_site_count: 5,
-					date: '2015-09-07T19:42:30+00:00',
-					has_unseen_notes: false,
-					newest_note_type: 'like',
-					phone_account: false,
-					email: 'test@example.com',
-					email_verified: true,
-					is_valid_google_apps_country: true,
-					logout_URL: 'https://www.example.com',
-					primary_blog_url: 'https://www.example.com',
-					meta: { links: {}, data: {} },
-					primarySiteSlug: 'www.example.com',
-					localeSlug: 'en',
-					isRTL: false
-				}
+		describe( 'persistence', () => {
+			var consoleStub;
+			before( () => {
+				consoleStub = sinon.stub( console, 'warn' );
 			} );
-			const persistedState = items( state, { type: SERIALIZE } );
-			expect( persistedState ).to.eql( state );
-		} );
+			after( () => {
+				consoleStub.restore();
+			} );
 
-		it( 'loads valid persisted state', () => {
-			const persistedState = Object.freeze( {
-				73705554: {
-					ID: 73705554,
-					display_name: 'Test User',
-					username: 'testuser',
-					avatar_URL: 'https://www.example.com',
-					site_count: 11,
-					visible_site_count: 5,
-					date: '2015-09-07T19:42:30+00:00',
-					has_unseen_notes: false,
-					newest_note_type: 'like',
-					phone_account: false,
-					email: 'test@example.com',
-					email_verified: true,
-					is_valid_google_apps_country: true,
-					logout_URL: 'https://www.example.com',
-					primary_blog_url: 'https://www.example.com',
-					meta: { links: {}, data: {} },
-					primarySiteSlug: 'www.example.com',
-					localeSlug: 'en',
-					isRTL: false
-				}
+			it( 'persists state', () => {
+				const state = Object.freeze( {
+					73705554: {
+						ID: 73705554,
+						display_name: 'Test User',
+						username: 'testuser',
+						avatar_URL: 'https://www.example.com',
+						site_count: 11,
+						visible_site_count: 5,
+						date: '2015-09-07T19:42:30+00:00',
+						has_unseen_notes: false,
+						newest_note_type: 'like',
+						phone_account: false,
+						email: 'test@example.com',
+						email_verified: true,
+						is_valid_google_apps_country: true,
+						logout_URL: 'https://www.example.com',
+						primary_blog_url: 'https://www.example.com',
+						meta: { links: {}, data: {} },
+						primarySiteSlug: 'www.example.com',
+						localeSlug: 'en',
+						isRTL: false
+					}
+				} );
+				const persistedState = items( state, { type: SERIALIZE } );
+				expect( persistedState ).to.eql( state );
 			} );
-			const state = items( persistedState, { type: DESERIALIZE } );
-			expect( state ).to.eql( persistedState );
-		} );
 
-		it( 'should ignore loading data with invalid keys ', () => {
-			const persistedState = Object.freeze( {
-				foo: {
-					ID: 73705554,
-					display_name: 'Test User',
-					username: 'testuser',
-					avatar_URL: 'https://www.example.com',
-					site_count: 11,
-					visible_site_count: 5,
-					date: '2015-09-07T19:42:30+00:00',
-					has_unseen_notes: false,
-					newest_note_type: 'like',
-					phone_account: false,
-					email: 'test@example.com',
-					email_verified: true,
-					is_valid_google_apps_country: true,
-					logout_URL: 'https://www.example.com',
-					primary_blog_url: 'https://www.example.com',
-					meta: { links: {}, data: {} },
-					primarySiteSlug: 'www.example.com',
-					localeSlug: 'en',
-					isRTL: false
-				}
+			it( 'loads valid persisted state', () => {
+				const persistedState = Object.freeze( {
+					73705554: {
+						ID: 73705554,
+						display_name: 'Test User',
+						username: 'testuser',
+						avatar_URL: 'https://www.example.com',
+						site_count: 11,
+						visible_site_count: 5,
+						date: '2015-09-07T19:42:30+00:00',
+						has_unseen_notes: false,
+						newest_note_type: 'like',
+						phone_account: false,
+						email: 'test@example.com',
+						email_verified: true,
+						is_valid_google_apps_country: true,
+						logout_URL: 'https://www.example.com',
+						primary_blog_url: 'https://www.example.com',
+						meta: { links: {}, data: {} },
+						primarySiteSlug: 'www.example.com',
+						localeSlug: 'en',
+						isRTL: false
+					}
+				} );
+				const state = items( persistedState, { type: DESERIALIZE } );
+				expect( state ).to.eql( persistedState );
 			} );
-			const state = items( persistedState, { type: DESERIALIZE } );
-			expect( state ).to.eql( {} );
-		} );
 
-		it( 'should ignore loading data with invalid values ', () => {
-			const persistedState = Object.freeze( {
-				foo: {
-					ID: 73705554,
-					display_name: 'Test User',
-					username: 'testuser',
-					avatar_URL: 'https://www.example.com',
-					site_count: 'eleven',
-					visible_site_count: 5,
-					date: '2015-09-07T19:42:30+00:00',
-					has_unseen_notes: false,
-					newest_note_type: 'like',
-					phone_account: false,
-					email: 'test@example.com',
-					email_verified: true,
-					is_valid_google_apps_country: true,
-					logout_URL: 'https://www.example.com',
-					primary_blog_url: 'https://www.example.com',
-					meta: { links: {}, data: {} },
-					primarySiteSlug: 'www.example.com',
-					localeSlug: 'en',
-					isRTL: false
-				}
+			it( 'should ignore loading data with invalid keys ', () => {
+				const persistedState = Object.freeze( {
+					foo: {
+						ID: 73705554,
+						display_name: 'Test User',
+						username: 'testuser',
+						avatar_URL: 'https://www.example.com',
+						site_count: 11,
+						visible_site_count: 5,
+						date: '2015-09-07T19:42:30+00:00',
+						has_unseen_notes: false,
+						newest_note_type: 'like',
+						phone_account: false,
+						email: 'test@example.com',
+						email_verified: true,
+						is_valid_google_apps_country: true,
+						logout_URL: 'https://www.example.com',
+						primary_blog_url: 'https://www.example.com',
+						meta: { links: {}, data: {} },
+						primarySiteSlug: 'www.example.com',
+						localeSlug: 'en',
+						isRTL: false
+					}
+				} );
+				const state = items( persistedState, { type: DESERIALIZE } );
+				expect( state ).to.eql( {} );
 			} );
-			const state = items( persistedState, { type: DESERIALIZE } );
-			expect( state ).to.eql( {} );
+
+			it( 'should ignore loading data with invalid values ', () => {
+				const persistedState = Object.freeze( {
+					foo: {
+						ID: 73705554,
+						display_name: 'Test User',
+						username: 'testuser',
+						avatar_URL: 'https://www.example.com',
+						site_count: 'eleven',
+						visible_site_count: 5,
+						date: '2015-09-07T19:42:30+00:00',
+						has_unseen_notes: false,
+						newest_note_type: 'like',
+						phone_account: false,
+						email: 'test@example.com',
+						email_verified: true,
+						is_valid_google_apps_country: true,
+						logout_URL: 'https://www.example.com',
+						primary_blog_url: 'https://www.example.com',
+						meta: { links: {}, data: {} },
+						primarySiteSlug: 'www.example.com',
+						localeSlug: 'en',
+						isRTL: false
+					}
+				} );
+				const state = items( persistedState, { type: DESERIALIZE } );
+				expect( state ).to.eql( {} );
+			} );
 		} );
 	} );
 } );

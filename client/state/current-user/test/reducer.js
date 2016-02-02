@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { expect } from 'chai';
+import sinon from 'sinon';
 
 /**
  * Internal dependencies
@@ -25,29 +26,40 @@ describe( 'reducer', () => {
 
 			expect( state ).to.equal( 73705554 );
 		} );
-		it( 'should validate ID is positive', () => {
-			const state = id( -1, {
-				type: DESERIALIZE
+
+		describe( 'persistence', () => {
+			var consoleStub;
+			before( () => {
+				consoleStub = sinon.stub( console, 'warn' );
 			} );
-			expect( state ).to.equal( null );
-		} );
-		it( 'should validate ID is a number', () => {
-			const state = id( 'foobar', {
-				type: DESERIALIZE
+			after( () => {
+				consoleStub.restore();
 			} );
-			expect( state ).to.equal( null );
-		} );
-		it( 'returns valid ID', () => {
-			const state = id( 73705554, {
-				type: DESERIALIZE
+
+			it( 'should validate ID is positive', () => {
+				const state = id( -1, {
+					type: DESERIALIZE
+				} );
+				expect( state ).to.equal( null );
 			} );
-			expect( state ).to.equal( 73705554 );
-		} );
-		it( 'will SERIALIZE current user', () => {
-			const state = id( 73705554, {
-				type: SERIALIZE
+			it( 'should validate ID is a number', () => {
+				const state = id( 'foobar', {
+					type: DESERIALIZE
+				} );
+				expect( state ).to.equal( null );
 			} );
-			expect( state ).to.equal( 73705554 );
+			it( 'returns valid ID', () => {
+				const state = id( 73705554, {
+					type: DESERIALIZE
+				} );
+				expect( state ).to.equal( 73705554 );
+			} );
+			it( 'will SERIALIZE current user', () => {
+				const state = id( 73705554, {
+					type: SERIALIZE
+				} );
+				expect( state ).to.equal( 73705554 );
+			} );
 		} );
 	} );
 } );

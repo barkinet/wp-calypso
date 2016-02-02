@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { expect } from 'chai';
+import sinon from 'sinon';
 
 /**
  * Internal dependencies
@@ -56,39 +57,66 @@ describe( 'reducer', () => {
 				2916284: { ID: 2916284, name: 'Just You Wait' }
 			} );
 		} );
-		it( 'should return a js object on SERIALIZE', () => {
-			const original = Object.freeze( {
-				2916284: { ID: 2916284, name: 'WordPress.com Example Blog', somethingDecoratedMe: () => {} }
+		describe( 'persistence', () => {
+			var consoleStub;
+			before( () => {
+				consoleStub = sinon.stub( console, 'warn' );
 			} );
-			const state = items( original, { type: SERIALIZE } );
-			expect( state ).to.eql( {
-				2916284: { ID: 2916284, name: 'WordPress.com Example Blog' }
+			after( () => {
+				consoleStub.restore();
 			} );
-		} );
-		it( 'it validates state on DESERIALIZE', () => {
-			const original = Object.freeze( {
-				2916284: { ID: 2916284, name: 'WordPress.com Example Blog' },
-				2916285: { ID: 2916285, name: 'WordPress.com Example Blog 2' }
+
+			it( 'should return a js object on SERIALIZE', () => {
+				const original = Object.freeze( {
+					2916284: {
+						ID: 2916284,
+						name: 'WordPress.com Example Blog',
+						somethingDecoratedMe: () => {
+						}
+					}
+				} );
+				const state = items( original, { type: SERIALIZE } );
+				expect( state ).to.eql( {
+					2916284: { ID: 2916284, name: 'WordPress.com Example Blog' }
+				} );
 			} );
-			const state = items( original, { type: DESERIALIZE } );
-			expect( state ).to.eql( {
-				2916284: { ID: 2916284, name: 'WordPress.com Example Blog' },
-				2916285: { ID: 2916285, name: 'WordPress.com Example Blog 2' }
+			it( 'it validates state on DESERIALIZE', () => {
+				const original = Object.freeze( {
+					2916284: {
+						ID: 2916284,
+						name: 'WordPress.com Example Blog'
+					},
+					2916285: {
+						ID: 2916285,
+						name: 'WordPress.com Example Blog 2'
+					}
+				} );
+				const state = items( original, { type: DESERIALIZE } );
+				expect( state ).to.eql( {
+					2916284: {
+						ID: 2916284,
+						name: 'WordPress.com Example Blog'
+					},
+					2916285: {
+						ID: 2916285,
+						name: 'WordPress.com Example Blog 2'
+					}
+				} );
 			} );
-		} );
-		it( 'when state has validation errors on DESERIALIZE it returns initial state', () => {
-			const original = Object.freeze( {
-				2916284: { name: 'WordPress.com Example Blog' }
+			it( 'when state has validation errors on DESERIALIZE it returns initial state', () => {
+				const original = Object.freeze( {
+					2916284: { name: 'WordPress.com Example Blog' }
+				} );
+				const state = items( original, { type: DESERIALIZE } );
+				expect( state ).to.eql( {} );
 			} );
-			const state = items( original, { type: DESERIALIZE } );
-			expect( state ).to.eql( {} );
-		} );
-		it( 'when state has validation errors on DESERIALIZE it returns initial state', () => {
-			const original = Object.freeze( {
-				foobar: { name: 'WordPress.com Example Blog' }
+			it( 'when state has validation errors on DESERIALIZE it returns initial state', () => {
+				const original = Object.freeze( {
+					foobar: { name: 'WordPress.com Example Blog' }
+				} );
+				const state = items( original, { type: DESERIALIZE } );
+				expect( state ).to.eql( {} );
 			} );
-			const state = items( original, { type: DESERIALIZE } );
-			expect( state ).to.eql( {} );
 		} );
 	} );
 } );
