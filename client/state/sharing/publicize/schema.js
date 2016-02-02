@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import Joi from 'joi';
+import Joi from 'joi-browser';
 
 export const fetchingConnectionsSchema = Joi.object().pattern( /\d+/, Joi.boolean() );
 

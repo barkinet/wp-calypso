@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import Joi from 'joi';
+import Joi from 'joi-browser';
 
 const user = Joi.object().keys( {
 	ID: Joi.number().integer().required(),

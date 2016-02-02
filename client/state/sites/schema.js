@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import Joi from 'joi';
+import Joi from 'joi-browser';
 
 const logo = Joi.object().keys( {
 	id: Joi.number().integer(),

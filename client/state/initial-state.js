@@ -3,7 +3,6 @@
  */
 import debugModule from 'debug';
 import localforage from 'localforage';
-import msgpack from 'msgpack-lite';
 
 /**
  * Internal dependencies
@@ -25,18 +24,15 @@ export const localforageConfig = {
 };
 
 function serialize( state ) {
-	const unencodedState = reducer( state, { type: SERIALIZE } );
-	return msgpack.encode( unencodedState );
+	return reducer( state, { type: SERIALIZE } );
 }
 
-function deserialize( encodedState ) {
-	const state = msgpack.decode( encodedState );
-	debug( 'decoded state', state );
+function deserialize( state ) {
 	return reducer( state, { type: DESERIALIZE } );
 }
 
 function loadInitialState( initialState ) {
-	debug( 'loading initial state' );
+	debug( 'loading initial state', initialState );
 	if ( initialState === null ) {
 		throw new Error( 'no initial state found in localforage' );
 	}

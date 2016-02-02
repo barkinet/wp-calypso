@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import Joi from 'joi';
+import Joi from 'joi-browser';
 
 const query = Joi.object().keys( {
 	search: Joi.string().allow( '', null ).optional(),
