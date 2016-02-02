@@ -75,7 +75,6 @@ webpackConfig = {
 				NODE_ENV: JSON.stringify( config( 'env' ) )
 			}
 		} ),
-		new webpack.NormalModuleReplacementPlugin( /^(net|dns)$/, path.resolve( __dirname, 'client/lib/shim.js' ) ),
 		new webpack.optimize.OccurenceOrderPlugin( true ),
 		new webpack.IgnorePlugin( /^props$/ ),
 		new webpack.IgnorePlugin( /^\.\/locale$/, /moment$/ )

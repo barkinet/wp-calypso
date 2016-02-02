@@ -61,7 +61,7 @@
     "lru-cache": "4.0.0",
     "lunr": "0.5.7",
     "marked": "0.3.5",
-    "moment": "2.11.1",
+    "moment": "2.10.6",
     "moment-timezone": "^0.4.0",
     "morgan": "1.2.0",
     "node-sass": "3.4.2",

@@ -7308,9 +7308,7 @@
       "resolved": "https://registry.npmjs.org/mockery/-/mockery-1.4.0.tgz"
     },
     "moment": {
-      "version": "2.10.6",
-      "from": "moment@2.10.6",
-      "resolved": "https://registry.npmjs.org/moment/-/moment-2.10.6.tgz"
+      "version": "2.10.6"
     },
     "moment-timezone": {
       "version": "0.4.1",
@@ -13348,9 +13346,6 @@
             },
             "isemail": {
               "version": "2.1.0"
-            },
-            "moment": {
-              "version": "2.11.1"
             }
           }
         }
