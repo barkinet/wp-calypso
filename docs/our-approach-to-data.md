@@ -235,7 +235,7 @@ Fetching components accept as few props as possible to describe the data needs o
 
 The benefits of fetching components are that they (a) are reusable, (b) take advantage of React's lifecycle methods to ensure that data needs are kept in sync, and (c) can be used by [connected "App Components"](https://wpcalypso.wordpress.com/devdocs/app-components) to maintain their self-sufficiency. That they neither accept nor render children eliminates the need for ancestor components to concern themselves with the data needs of leaf components and [can be more performant](https://www.youtube.com/watch?v=KYzlpRvWZ6c&t=1137).
 
-When creating a component that needs to consume data, we can simply include a fetching component as a child of that component, consuming from the state selectors populated by the results of the network request initiated by the fetching component.
+When creating a component that needs to consume data, we can simply include a fetching component as a child of that component. Placement of a fetching component might vary depending upon your usage. Reusable components such as App Components should always render a fetching component as a child to ensure self-sufficiency. For components specific to a particular section, it may be overkill to render a fetching component for every connected component, in which case you may consider including the fetching component towards the top of the render hierarchy.
 
 Refer to the [`<QueryPosts />` component](https://github.com/Automattic/wp-calypso/tree/master/client/components/data/query-posts) as an example of a fetching component. New fetching components should be added to the `components/data` directory, prefixed with `query-` such to distinguish them from existing data components.
 
