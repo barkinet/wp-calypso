@@ -7,15 +7,14 @@ import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 /**
  * Internal dependencies
  */
-import { analyticsMiddleware } from './themes/middlewares.js';
 import application from './application/reducer';
 import notices from './notices/reducer';
 import posts from './posts/reducer';
 import plugins from './plugins/reducer';
 import sharing from './sharing/reducer';
 import sites from './sites/reducer';
-import siteSettings from './site-settings/reducer'
-import support from './support/reducer'
+import siteSettings from './site-settings/reducer';
+import support from './support/reducer';
 import themes from './themes/reducer';
 import users from './users/reducer';
 import currentUser from './current-user/reducer';
@@ -39,10 +38,16 @@ const reducer = combineReducers( {
 	ui
 } );
 
-var createStoreWithMiddleware = applyMiddleware(
-	thunkMiddleware,
-	analyticsMiddleware
-);
+let middleware = [ thunkMiddleware ];
+
+if ( typeof window === 'object' ) {
+	middleware = [
+		...middleware,
+		require( './themes/middlewares.js' ).analyticsMiddleware
+	];
+}
+
+let createStoreWithMiddleware = applyMiddleware.apply( null, middleware );
 
 function getInitialState() {
 	if ( typeof window === 'object' && window.redux_store ) {
